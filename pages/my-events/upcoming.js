@@ -4,6 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import EventCard from "../../components/EventCard";
 import Dashboard from "../../components/Dashboard";
+import { ConnectWalletSection } from "../../components/shared/ConnectWalletSection";
 
 const MY_UPCOMING_EVENTS = gql`
   query Events($eventOwner: String, $currentTimestamp: String) {
@@ -63,6 +64,8 @@ export default function MyUpcomingEvents() {
                     name={event.name}
                     eventTimestamp={event.eventTimestamp}
                     imageURL={event.imageURL}
+                    totalRSVPs={event.totalRSVPs}
+                    maxCapacity={event.maxCapacity}
                   />
                 </li>
               ))}
@@ -70,10 +73,7 @@ export default function MyUpcomingEvents() {
           )}
         </div>
       ) : (
-        <div className="flex flex-col items-center py-8">
-          <p className="mb-4">Please connect your wallet to view your events</p>
-          <ConnectButton />
-        </div>
+        <ConnectWalletSection />
       )}
     </Dashboard>
   );

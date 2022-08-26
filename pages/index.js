@@ -10,6 +10,8 @@ const UPCOMING_EVENTS = gql`
       name
       eventTimestamp
       imageURL
+      maxCapacity
+      totalRSVPs
     }
   }
 `;
@@ -49,6 +51,8 @@ export default function Home() {
                 name={event.name}
                 eventTimestamp={event.eventTimestamp}
                 imageURL={event.imageURL}
+                totalRSVPs={event.totalRSVPs}
+                maxCapacity={event.maxCapacity}
               />
             </li>
           ))}

@@ -4,6 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import Dashboard from "../../components/Dashboard";
 import EventCard from "../../components/EventCard";
+import { ConnectWalletSection } from "../../components/shared/ConnectWalletSection";
 
 const MY_PAST_RSVPS = gql`
   query Account($id: String) {
@@ -63,6 +64,8 @@ export default function MyPastRSVPs() {
                         name={rsvp.event.name}
                         eventTimestamp={rsvp.event.eventTimestamp}
                         imageURL={rsvp.event.imageURL}
+                        totalRSVPs={rsvp.event.totalRSVPs}
+                        maxCapacity={rsvp.event.maxCapacity}
                       />
                     </li>
                   );
@@ -72,10 +75,7 @@ export default function MyPastRSVPs() {
           )}
         </div>
       ) : (
-        <div className="flex flex-col items-center py-8">
-          <p className="mb-4">Please connect your wallet to view your rsvps</p>
-          <ConnectButton />
-        </div>
+        <ConnectWalletSection />
       )}
     </Dashboard>
   );

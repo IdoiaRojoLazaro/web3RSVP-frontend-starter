@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { gql, useQuery } from "@apollo/client";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import EventCard from "../../../components/EventCard";
 import Dashboard from "../../../components/Dashboard";
+import { ConnectWalletSection } from "../../../components/shared/ConnectWalletSection";
 
 const MY_PAST_EVENTS = gql`
   query Events($eventOwner: String, $currentTimestamp: String) {
@@ -64,22 +64,24 @@ export default function MyPastEvents() {
                     name={event.name}
                     eventTimestamp={event.eventTimestamp}
                     imageURL={event.imageURL}
+                    totalRSVPs={event.totalRSVPs}
+                    maxCapacity={event.maxCapacity}
                   />
-                  <Link href={`/my-events/past/${event.id}`}>
-                    <a className="text-indigo-800 text-sm truncate hover:underline">
-                      Confirm attendees
-                    </a>
-                  </Link>
+                  {event.totalRSVPs > 0 &&
+                    event.totalRSVPs > event.confirmedAttendees && (
+                      <Link href={`/my-events/past/${event.id}`}>
+                        <a className="text-antiqueBlue-600 text-sm truncate hover:text-antiqueBlue-800 px-5 pb-5 block">
+                          Confirm attendees
+                        </a>
+                      </Link>
+                    )}
                 </li>
               ))}
             </ul>
           )}
         </div>
       ) : (
-        <div className="flex flex-col items-center py-8">
-          <p className="mb-4">Please connect your wallet to view your events</p>
-          <ConnectButton />
-        </div>
+        <ConnectWalletSection />
       )}
     </Dashboard>
   );

@@ -104,7 +104,7 @@ function Event({ event }) {
         </h1>
         <div className="flex flex-wrap-reverse lg:flex-nowrap">
           <div className="w-full pr-0 lg:pr-24 xl:pr-32">
-            <div className="mb-8 w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
+            <div className="mb-8 w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-antiqueBlue-500 overflow-hidden">
               {event.imageURL && (
                 <Image src={event.imageURL} alt="event image" layout="fill" />
               )}
@@ -120,9 +120,9 @@ function Event({ event }) {
                       You have RSVPed! 🙌
                     </span>
                     <div className="flex item-center">
-                      <LinkIcon className="w-6 mr-2 text-indigo-800" />
+                      <LinkIcon className="w-6 mr-2 text-antiqueBlue-800" />
                       <a
-                        className="text-indigo-800 truncate hover:underline"
+                        className="text-antiqueBlue-800 truncate hover:underline"
                         href={event.link}
                       >
                         {event.link}
@@ -132,7 +132,7 @@ function Event({ event }) {
                 ) : (
                   <button
                     type="button"
-                    className="w-full items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="w-full items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-antiqueBlue-700 bg-antiqueBlue-100 hover:bg-antiqueBlue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-antiqueBlue-500"
                     onClick={newRSVP}
                   >
                     RSVP for {ethers.utils.formatEther(event.deposit)} MATIC
@@ -161,7 +161,7 @@ function Event({ event }) {
               <span className="truncate">
                 Hosted by{" "}
                 <a
-                  className="text-indigo-800 truncate hover:underline"
+                  className="text-antiqueBlue-800 truncate hover:underline"
                   href={`${process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL}address/${event.eventOwner}`}
                   target="_blank"
                   rel="noreferrer"

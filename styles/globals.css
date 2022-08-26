@@ -24,3 +24,10 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+section li {
+  box-shadow: 0 16px 64px -16px rgb(46 55 77 / 10%);
+}
+section li:hover {
+  box-shadow: 0 16px 64px -16px rgb(46 55 77 / 24%);
+}
