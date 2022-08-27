@@ -33,13 +33,15 @@ export default function Alert({ alertType, alertBody, triggerAlert, color }) {
             )}
           </div>
           <div className="ml-2">
-            <p className="text-sm font-medium text-gray-900">{alertBody}</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
+              {alertBody}
+            </p>
           </div>
           <div className="ml-auto pl-3">
             <div className="mx-3.5 -my-1.5">
               <button
                 type="button"
-                className="inline-flex rounded-md p-1.5 text-gray-900 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-600"
+                className="inline-flex rounded-md p-1.5 text-gray-900 dark:text-white hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-600"
               >
                 <span className="sr-only">Dismiss</span>
                 <XIcon

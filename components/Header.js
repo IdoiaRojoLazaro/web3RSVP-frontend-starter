@@ -3,9 +3,10 @@ import Link from "next/link";
 import Navmenu from "./Navmenu";
 import { useAccount, useDisconnect } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { PlusCircleIcon, PlusIcon } from "@heroicons/react/outline";
+import { PlusIcon } from "@heroicons/react/outline";
+import { ThemeToggle } from "./ThemeToggle";
 
-export default function Navbar() {
+export default function Header() {
   const { data: account } = useAccount();
   const { disconnect } = useDisconnect();
   const [mounted, setMounted] = useState(false);
@@ -16,15 +17,20 @@ export default function Navbar() {
 
   return (
     mounted && (
-      <header className="bg-white border-b-2 border-gray-100">
+      <header
+        className="sticky top-0 z-50 border-b-2 border-gray-100 dark:border-antiqueBlue-700 w-screen bg-white
+      dark:bg-antiqueBlue-900
+      "
+      >
         <nav
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
           aria-label="Top"
         >
           <div className="w-full py-3 flex flex-wrap items-center justify-between border-b border-antiqueBlue-500 lg:border-none">
             <div className="flex items-center">
+              <ThemeToggle />
               <Link href="/">
-                <a>web3rsvp</a>
+                <a className="ml-3">web3rsvp</a>
               </Link>
             </div>
             <div className="ml-10 space-x-4 flex items-center">

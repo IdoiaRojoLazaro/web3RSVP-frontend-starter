@@ -43,7 +43,9 @@ export default function Navmenu({ account, disconnect }) {
                 <a
                   href={`/my-rsvps/upcoming`}
                   className={joinClassNames(
-                    account ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    account
+                      ? "bg-gray-100 text-gray-900 dark:text-white"
+                      : "text-gray-700",
                     "block px-4 py-2 text-sm"
                   )}
                 >
@@ -56,7 +58,9 @@ export default function Navmenu({ account, disconnect }) {
                 <a
                   href={`/my-events/upcoming`}
                   className={joinClassNames(
-                    account ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    account
+                      ? "bg-gray-100 text-gray-900 dark:text-white"
+                      : "text-gray-700",
                     "block px-4 py-2 text-sm"
                   )}
                 >
@@ -69,7 +73,9 @@ export default function Navmenu({ account, disconnect }) {
                 <a
                   onClick={disconnect}
                   className={joinClassNames(
-                    account ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    account
+                      ? "bg-gray-100 text-gray-900 dark:text-white"
+                      : "text-gray-700",
                     "block px-4 py-2 text-sm cursor-pointer"
                   )}
                 >

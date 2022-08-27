@@ -1,9 +1,12 @@
 export default function Footer() {
   return (
-    <footer className="bg-white border-t-2 border-gray-100">
+    <footer className="border-t-2 border-gray-100">
       <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
         <div className="flex justify-center space-x-6 md:order-2">
-          <a href="#" className="text-sm text-gray-500 hover:text-gray-900">
+          <a
+            href="#"
+            className="text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white"
+          >
             Created by Idoia Rojo
           </a>
 

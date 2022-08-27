@@ -141,7 +141,7 @@ function PastEvent({ event }) {
                     </a>
                   </Link>
 
-                  <h1 className="text-2xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl mt-4">
+                  <h1 className="text-2xl tracking-tight font-extrabold text-gray-900 dark:text-white sm:text-3xl md:text-4xl mt-4">
                     {event.name}
                   </h1>
                   <h6 className="text-sm mb-8 flex items-center">
@@ -157,7 +157,7 @@ function PastEvent({ event }) {
                               <tr>
                                 <th
                                   scope="col"
-                                  className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                  className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6"
                                 >
                                   Attendee
                                 </th>
@@ -182,7 +182,7 @@ function PastEvent({ event }) {
                             <tbody className="divide-y divide-gray-200 bg-white">
                               {event.rsvps.map((rsvp) => (
                                 <tr key={rsvp.attendee.id}>
-                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-6">
                                     {rsvp.attendee.id}
                                   </td>
                                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
