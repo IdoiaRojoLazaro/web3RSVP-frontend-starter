@@ -1,10 +1,10 @@
 import React from "react";
 
-export const Label = ({ htmlFor, className, description, children }) => {
+export const Label = ({ className, description, children, ...rest }) => {
   return (
     <label
-      htmlFor={htmlFor}
       className={`block text-sm font-medium text-gray-700 dark:text-antiqueBlue-100 sm:mt-px sm:pt-2 ${className}`}
+      {...rest}
     >
       {children}
       {description && (

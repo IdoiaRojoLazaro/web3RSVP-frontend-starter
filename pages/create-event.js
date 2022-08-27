@@ -10,6 +10,10 @@ import getRandomImage from "../utils/getRandomImage";
 import { ConnectWalletSection } from "../components/shared/ConnectWalletSection";
 import { LoadingTxn } from "../components/shared/LoadingTxn";
 import { SuccessTxn } from "../components/shared/SuccessTxn";
+import { Label } from "../components/forms/Label";
+import { InputGroup } from "../components/forms/InputGroup";
+import { Input } from "../components/forms/Input";
+import { InputContainer } from "../components/forms/InputContainer";
 
 export default function CreateEvent() {
   const { data: account } = useAccount();
@@ -122,7 +126,7 @@ export default function CreateEvent() {
       {!account ? (
         <ConnectWalletSection />
       ) : (
-        <section className="relative py-12">
+        <section className="relative py-12 max-w-3xl m-auto">
           {loading && <LoadingTxn message={message} />}
           {success && (
             <SuccessTxn
@@ -147,38 +151,26 @@ export default function CreateEvent() {
               onSubmit={handleSubmit}
               className="space-y-8 divide-y divide-gray-200"
             >
-              <div className="space-y-6 sm:space-y-5">
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                  <label
-                    htmlFor="eventname"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >
-                    Event name
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
+              <div className="space-y-6 sm:space-y-5 ">
+                <InputGroup>
+                  <Label htmlFor="eventname">Event name</Label>
+                  <InputContainer>
+                    <Input
                       id="event-name"
                       name="event-name"
                       type="text"
-                      className="block max-w-lg w-full shadow-sm focus:ring-antiqueBlue-500 focus:border-antiqueBlue-500 sm:text-sm border border-gray-300 rounded-md"
-                      required
                       value={eventName}
                       onChange={(e) => setEventName(e.target.value)}
                     />
-                  </div>
-                </div>
+                  </InputContainer>
+                </InputGroup>
 
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                  <label
-                    htmlFor="date"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >
+                <InputGroup>
+                  <Label htmlFor="date" description="Your event date and time">
                     Date & time
-                    <p className="mt-1 max-w-2xl text-sm text-gray-400">
-                      Your event date and time
-                    </p>
-                  </label>
-                  <div className="mt-1 sm:mt-0 flex flex-wrap sm:flex-nowrap gap-2">
+                  </Label>
+                  {/* <div className="mt-1 sm:mt-0 flex flex-wrap sm:flex-nowrap gap-2"> */}
+                  <InputContainer className="flex gap-2">
                     <div className="w-1/2">
                       <input
                         id="date"
@@ -201,46 +193,39 @@ export default function CreateEvent() {
                         onChange={(e) => setEventTime(e.target.value)}
                       />
                     </div>
-                  </div>
-                </div>
+                  </InputContainer>
+                  {/* </div> */}
+                </InputGroup>
 
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                  <label
+                <InputGroup>
+                  <Label
                     htmlFor="max-capacity"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                    description="Limit the number of spots available for your event."
                   >
                     Max capacity
-                    <p className="mt-1 max-w-2xl text-sm text-gray-400">
-                      Limit the number of spots available for your event.
-                    </p>
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
+                  </Label>
+                  <InputContainer>
+                    <Input
                       type="number"
                       name="max-capacity"
                       id="max-capacity"
                       min="1"
                       placeholder="100"
-                      className="max-w-lg block w-full shadow-sm focus:ring-antiqueBlue-500 focus:border-antiqueBlue-500 sm:max-w-xs sm:text-sm border border-gray-300 rounded-md"
                       value={maxCapacity}
                       onChange={(e) => setMaxCapacity(e.target.value)}
                     />
-                  </div>
-                </div>
+                  </InputContainer>
+                </InputGroup>
 
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                  <label
+                <InputGroup>
+                  <Label
                     htmlFor="refundable-deposit"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                    description="Require a refundable deposit (in MATIC) to reserve one spot at your event"
                   >
                     Refundable deposit
-                    <p className="mt-1 max-w-2xl text-sm text-gray-400">
-                      Require a refundable deposit (in MATIC) to reserve one
-                      spot at your event
-                    </p>
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
+                  </Label>
+                  <InputContainer>
+                    <Input
                       type="number"
                       name="refundable-deposit"
                       id="refundable-deposit"
@@ -248,46 +233,38 @@ export default function CreateEvent() {
                       step="any"
                       inputMode="decimal"
                       placeholder="0.00"
-                      className="max-w-lg block w-full shadow-sm focus:ring-antiqueBlue-500 focus:border-antiqueBlue-500 sm:max-w-xs sm:text-sm border border-gray-300 rounded-md"
                       value={refund}
                       onChange={(e) => setRefund(e.target.value)}
                     />
-                  </div>
-                </div>
+                  </InputContainer>
+                </InputGroup>
 
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                  <label
+                <InputGroup>
+                  <Label
                     htmlFor="event-link"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                    description="The link for your virtual event"
                   >
                     Event link
-                    <p className="mt-1 max-w-2xl text-sm text-gray-400">
-                      The link for your virtual event
-                    </p>
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    <input
+                  </Label>
+                  <InputContainer>
+                    <Input
                       id="event-link"
                       name="event-link"
                       type="text"
-                      className="block max-w-lg w-full shadow-sm focus:ring-antiqueBlue-500 focus:border-antiqueBlue-500 sm:text-sm border border-gray-300 rounded-md"
-                      required
                       value={eventLink}
                       onChange={(e) => setEventLink(e.target.value)}
                     />
-                  </div>
-                </div>
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                  <label
+                  </InputContainer>
+                </InputGroup>
+
+                <InputGroup>
+                  <Label
                     htmlFor="about"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                    description="Let people know what your event is about!"
                   >
                     Event description
-                    <p className="mt-2 text-sm text-gray-400">
-                      Let people know what your event is about!
-                    </p>
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  </Label>
+                  <InputContainer>
                     <textarea
                       id="about"
                       name="about"
@@ -296,9 +273,10 @@ export default function CreateEvent() {
                       value={eventDescription}
                       onChange={(e) => setEventDescription(e.target.value)}
                     />
-                  </div>
-                </div>
+                  </InputContainer>
+                </InputGroup>
               </div>
+
               <div className="pt-5">
                 <div className="flex justify-end">
                   <Link href="/">
@@ -316,18 +294,6 @@ export default function CreateEvent() {
               </div>
             </form>
           </>
-
-          {/* {success && eventID && (
-            <div>
-              <h1 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl md:text-5xl mb-4">
-                Success! Please wait a few minutes, then check out your event
-                page{" "}
-              </h1>
-              <span className="font-bold">
-                <Link href={`/event/${eventID}`}>here</Link>
-              </span>
-            </div>
-          )} */}
         </section>
       )}
     </div>
