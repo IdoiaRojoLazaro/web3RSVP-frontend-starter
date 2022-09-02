@@ -2,11 +2,7 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import joinClassNames from "../utils/joinClassNames";
 import truncateAddress from "../utils/truncateAddress";
-import {
-  ArrowDownIcon,
-  ChevronDownIcon,
-  UserIcon,
-} from "@heroicons/react/outline";
+import { ChevronDownIcon, UserIcon } from "@heroicons/react/outline";
 
 export default function Navmenu({ account, disconnect }) {
   return (

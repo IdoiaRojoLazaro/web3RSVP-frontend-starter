@@ -7,7 +7,8 @@ export const Input = ({ ...rest }) => {
       focus:ring-antiqueBlue-500 focus:border-antiqueBlue-500 
       sm:text-sm border border-gray-300 rounded-md
       text-antiqueBlue-900
-      "
+      placeholder:text-antiqueBlue-600
+      dark:text-antiqueBlue-900"
       required
       {...rest}
     />

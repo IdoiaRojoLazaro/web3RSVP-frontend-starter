@@ -21,7 +21,7 @@ export default function Landing({ children }) {
           </p>
         </div>
       </section>
-      <section className="py-12">{children}</section>
+      <section>{children}</section>
     </div>
   );
 }

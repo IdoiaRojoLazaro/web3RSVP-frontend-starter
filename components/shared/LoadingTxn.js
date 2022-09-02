@@ -1,9 +1,11 @@
 import React from "react";
+import { Txn } from "../layout/Txn";
 
 export const LoadingTxn = ({ message }) => {
   return (
-    <div className="fixed flex flex-col w-screen h-screen items-center justify-center top-0 left-0 bg-slate-100 bg-opacity-80">
+    <Txn>
       <svg
+        className="text-antiqueBlue-800"
         xmlns="http://www.w3.org/2000/svg"
         width="60"
         height="60"
@@ -115,7 +117,7 @@ export const LoadingTxn = ({ message }) => {
           strokeWidth="16"
         ></line>
       </svg>
-      <p>{message}...</p>
-    </div>
+      <p className="text-lg text-antiqueBlue-90000">{message}</p>
+    </Txn>
   );
 };

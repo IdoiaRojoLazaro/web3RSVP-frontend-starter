@@ -2,6 +2,13 @@ import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import EventCard from "../components/EventCard";
 import Landing from "../components/Landing";
+import { validate } from "graphql";
+import Link from "next/link";
+import {
+  ExclamationIcon,
+  FolderOpenIcon,
+  PlusIcon,
+} from "@heroicons/react/outline";
 
 const UPCOMING_EVENTS = gql`
   query Events($currentTimestamp: String) {
@@ -36,7 +43,26 @@ export default function Home() {
         <p>`Error! ${error.message}`</p>
       </Landing>
     );
+  console.log(data);
+  if (data && data.events.length === 0) {
+    return (
+      <Landing>
+        <div className="text-center">
+          <ExclamationIcon className="w-16 h-16 m-auto" />
+          <p className="m-10 text-base text-gray-500 sm:mt-5 sm:text-lg sm:mx-auto md:mt-5 md:text-xl sm:max-w-xl m-autolg:mx-0">
+            There are no events upcoming. Do not hesitate and create one
+            yourself.
+          </p>
 
+          <Link href="/create-event">
+            <a className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-antiqueBlue-700 border-antiqueBlue-100 transition-all hover:bg-antiqueBlue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-antiqueBlue-500">
+              Create Event
+            </a>
+          </Link>
+        </div>
+      </Landing>
+    );
+  }
   return (
     <Landing>
       <ul

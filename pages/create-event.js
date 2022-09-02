@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { ethers } from "ethers";
@@ -14,6 +14,11 @@ import { Label } from "../components/forms/Label";
 import { InputGroup } from "../components/forms/InputGroup";
 import { Input } from "../components/forms/Input";
 import { InputContainer } from "../components/forms/InputContainer";
+import { InputFileWithPreview } from "../components/forms/InputFileWithPreview";
+import DragAndDropComp from "../components/forms/DragAndDropComp";
+import { storeImage } from "../utils/storageClient";
+import Button from "../components/shared/Button";
+import { btnTypeClasses } from "../utils/btnTypeClasses";
 
 export default function CreateEvent() {
   const { data: account } = useAccount();
@@ -24,6 +29,7 @@ export default function CreateEvent() {
   const [maxCapacity, setMaxCapacity] = useState("");
   const [refund, setRefund] = useState("");
   const [eventLink, setEventLink] = useState("");
+  const [eventImage, setEventImage] = useState("");
   const [eventDescription, setEventDescription] = useState("");
 
   const [success, setSuccess] = useState(null);
@@ -34,12 +40,16 @@ export default function CreateEvent() {
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    setMessage("Connecting wallet...");
+    setMessage("Uploading image ...");
+    const imageURL = await uploadImage();
+    setMessage("Connecting wallet ...");
+    console.log(eventImage);
     const body = {
       name: eventName,
       description: eventDescription,
       link: eventLink,
-      image: getRandomImage(),
+      // image: getRandomImage(),
+      imageIPFS: `${imageURL}/${eventImage.name}`,
     };
 
     try {
@@ -56,13 +66,19 @@ export default function CreateEvent() {
         let responseJSON = await response.json();
         await createEvent(responseJSON.cid);
       }
-      // check response, if success is false, dont take them to success page
+      // check response, if success is false, don't take them to success page
     } catch (error) {
       alert(
         `Oops! Something went wrong. Please refresh and try again. Error ${error}`
       );
     }
   }
+
+  const uploadImage = async () => {
+    const imageURI = await storeImage(eventImage, eventImage.name);
+    console.log(imageURI);
+    return imageURI.cid;
+  };
 
   const createEvent = async (cid) => {
     try {
@@ -84,11 +100,9 @@ export default function CreateEvent() {
         console.log("txn", txn);
 
         setLoading(true);
-        setMessage("Minting...");
-        console.log("Minting...", txn.hash);
+        setMessage("Minting ...");
         let wait = await txn.wait();
-        setMessage("Minted...");
-        console.log("Minted -- ", txn.hash);
+        setMessage("Minted ...");
 
         setEventID(wait.events[0].args[0]);
         setMessage("Your event has been created successfully.");
@@ -144,7 +158,7 @@ export default function CreateEvent() {
           )}
 
           <>
-            <h1 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl md:text-5xl mb-4">
+            <h1 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl md:text-5xl mb-4 dark:text-antiqueBlue-50">
               Create your virtual event
             </h1>
             <form
@@ -169,10 +183,18 @@ export default function CreateEvent() {
                   <Label htmlFor="date" description="Your event date and time">
                     Date & time
                   </Label>
-                  {/* <div className="mt-1 sm:mt-0 flex flex-wrap sm:flex-nowrap gap-2"> */}
                   <InputContainer className="flex gap-2">
                     <div className="w-1/2">
-                      <input
+                      <Input
+                        id="date"
+                        name="date"
+                        type="date"
+                        required
+                        value={eventDate}
+                        onChange={(e) => setEventDate(e.target.value)}
+                        min={new Date().toISOString().slice(0, -14)}
+                      />
+                      {/* <input
                         id="date"
                         name="date"
                         type="date"
@@ -180,10 +202,19 @@ export default function CreateEvent() {
                         required
                         value={eventDate}
                         onChange={(e) => setEventDate(e.target.value)}
-                      />
+                        min={new Date().toISOString().slice(0, -14)}
+                      /> */}
                     </div>
                     <div className="w-1/2">
-                      <input
+                      <Input
+                        id="time"
+                        name="time"
+                        type="time"
+                        required
+                        value={eventTime}
+                        onChange={(e) => setEventTime(e.target.value)}
+                      />
+                      {/* <input
                         id="time"
                         name="time"
                         type="time"
@@ -191,10 +222,9 @@ export default function CreateEvent() {
                         required
                         value={eventTime}
                         onChange={(e) => setEventTime(e.target.value)}
-                      />
+                      /> */}
                     </div>
                   </InputContainer>
-                  {/* </div> */}
                 </InputGroup>
 
                 <InputGroup>
@@ -259,6 +289,18 @@ export default function CreateEvent() {
 
                 <InputGroup>
                   <Label
+                    htmlFor="event-image"
+                    description="The image for your virtual event"
+                  >
+                    Event image
+                  </Label>
+                  <InputContainer>
+                    <DragAndDropComp setFile={setEventImage} />
+                  </InputContainer>
+                </InputGroup>
+
+                <InputGroup>
+                  <Label
                     htmlFor="about"
                     description="Let people know what your event is about!"
                   >
@@ -269,7 +311,11 @@ export default function CreateEvent() {
                       id="about"
                       name="about"
                       rows={10}
-                      className="max-w-lg shadow-sm block w-full focus:ring-antiqueBlue-500 focus:border-antiqueBlue-500 sm:text-sm border border-gray-300 rounded-md"
+                      className="max-w-lg shadow-sm block w-full 
+                      focus:ring-antiqueBlue-500 focus:border-antiqueBlue-500 
+                      sm:text-sm border border-gray-300 rounded-md
+                      placeholder:text-antiqueBlue-600
+                      dark:focus:text-antiqueBlue-900"
                       value={eventDescription}
                       onChange={(e) => setEventDescription(e.target.value)}
                     />
@@ -280,16 +326,9 @@ export default function CreateEvent() {
               <div className="pt-5">
                 <div className="flex justify-end">
                   <Link href="/">
-                    <a className="bg-white py-2 px-4 border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-antiqueBlue-500">
-                      Cancel
-                    </a>
+                    <a className={btnTypeClasses("cancel")}>Cancel</a>
                   </Link>
-                  <button
-                    type="submit"
-                    className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-antiqueBlue-600 hover:bg-antiqueBlue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-antiqueBlue-500"
-                  >
-                    Create
-                  </button>
+                  <Button type="submit">Create</Button>
                 </div>
               </div>
             </form>
