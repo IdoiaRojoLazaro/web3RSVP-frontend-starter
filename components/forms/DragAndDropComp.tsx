@@ -4,21 +4,21 @@ import { TrashIcon } from "@heroicons/react/outline";
 
 const DragAndDropComp = ({ setFile }) => {
   const [dragOver, setDragOver] = useState(false);
-  const [data, setData] = useState(null);
-  const [err, setErr] = useState(false);
-  const fileRefInput = useRef();
+  const [data, setData] = useState<any>(null);
+  const [err, setErr] = useState<string | false>(false);
+  const fileRefInput = useRef<HTMLInputElement>();
 
   const handleDrag = (e, over) => {
     e.preventDefault();
     setDragOver(over ? true : false);
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     fileRefInput.current.click();
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFile(e.currentTarget?.files[0]);
     setData(URL.createObjectURL(e.target?.files[0]));
   };
@@ -78,7 +78,7 @@ const DragAndDropComp = ({ setFile }) => {
           type="file"
           autoComplete="off"
           accept=".jpg, .jpeg, .png, .gif"
-          onChange={(e) => handleFileChange(e, true)}
+          onChange={handleFileChange}
           // style={{ display: "none" }}
           hidden
           ref={fileRefInput}
@@ -96,7 +96,7 @@ const DragAndDropComp = ({ setFile }) => {
               transition-all"
               onClick={() => setData(null)}
             >
-              <TrashIcon size={14} />
+              <TrashIcon fontSize={14} />
             </button>
           </>
         )}
@@ -104,7 +104,7 @@ const DragAndDropComp = ({ setFile }) => {
           <>
             <div
               className="flex flex-col items-center justify-center space-x-2 h-20"
-              onClick={handleClick}
+              onClick={(e) => handleClick(e)}
             >
               <div className="flex items-center">
                 <svg

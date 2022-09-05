@@ -3,6 +3,15 @@ import Image from "next/image";
 import formatTimestamp from "../utils/formatTimestamp";
 import { UsersIcon } from "@heroicons/react/outline";
 
+interface EventCardInterface {
+  id: number;
+  name: string;
+  eventTimestamp: string;
+  imageURL: string;
+  totalRSVPs: number;
+  maxCapacity: number;
+}
+
 export default function EventCard({
   id,
   name,
@@ -10,7 +19,7 @@ export default function EventCard({
   imageURL,
   totalRSVPs,
   maxCapacity,
-}) {
+}: EventCardInterface) {
   return (
     <div className="group relative clickable-card rounded-lg focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-antiqueBlue-500">
       <Link href={`/event/${id}`}>

@@ -1,15 +1,16 @@
 import React from "react";
-import useDarkMode from "../providers/useDarkMode";
+
+import useDarkMode, { ThemeType } from "../providers/useDarkMode";
 
 export const ThemeToggle = () => {
-  const [colorTheme, setTheme] = useDarkMode();
+  const { colorTheme, handleTheme } = useDarkMode();
 
   return (
     <>
       <div className="border rounded-md p-1">
         {colorTheme === "light" ? (
           <svg
-            onClick={() => setTheme("light")}
+            onClick={() => handleTheme(ThemeType.LIGHT)}
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
@@ -25,7 +26,7 @@ export const ThemeToggle = () => {
           </svg>
         ) : (
           <svg
-            onClick={() => setTheme("dark")}
+            onClick={() => handleTheme(ThemeType.DARK)}
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"

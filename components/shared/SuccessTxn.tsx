@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { Txn } from "../layout/Txn";
 
-export const SuccessTxn = ({ title, href }) => {
+export const SuccessTxn = ({ title, href }: { title: string, href: string }) => {
   return (
     <Txn>
       <svg

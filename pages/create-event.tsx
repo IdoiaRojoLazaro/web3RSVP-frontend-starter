@@ -2,11 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { ethers } from "ethers";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import Alert from "../components/Alert";
 import connectContract from "../utils/connectContract";
-import getRandomImage from "../utils/getRandomImage";
 import { ConnectWalletSection } from "../components/shared/ConnectWalletSection";
 import { LoadingTxn } from "../components/shared/LoadingTxn";
 import { SuccessTxn } from "../components/shared/SuccessTxn";
@@ -14,7 +12,6 @@ import { Label } from "../components/forms/Label";
 import { InputGroup } from "../components/forms/InputGroup";
 import { Input } from "../components/forms/Input";
 import { InputContainer } from "../components/forms/InputContainer";
-import { InputFileWithPreview } from "../components/forms/InputFileWithPreview";
 import DragAndDropComp from "../components/forms/DragAndDropComp";
 import { storeImage } from "../utils/storageClient";
 import Button from "../components/shared/Button";
@@ -29,7 +26,7 @@ export default function CreateEvent() {
   const [maxCapacity, setMaxCapacity] = useState("");
   const [refund, setRefund] = useState("");
   const [eventLink, setEventLink] = useState("");
-  const [eventImage, setEventImage] = useState("");
+  const [eventImage, setEventImage] = useState<any>("");
   const [eventDescription, setEventDescription] = useState("");
 
   const [success, setSuccess] = useState(null);
@@ -121,9 +118,10 @@ export default function CreateEvent() {
 
   useEffect(() => {
     // disable scroll on <input> elements of type number
-    document.addEventListener("wheel", (event) => {
-      if (document.activeElement.type === "number") {
-        document.activeElement.blur();
+    document.addEventListener("wheel", (_) => {
+      const element = (document.activeElement as HTMLInputElement);
+      if (element.type === "number") {
+        (document.activeElement as HTMLElement).blur();
       }
     });
   });

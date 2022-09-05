@@ -1,7 +1,7 @@
 import React from "react";
 import { Txn } from "../layout/Txn";
 
-export const LoadingTxn = ({ message }) => {
+export const LoadingTxn = ({ message }: { message: string }) => {
   return (
     <Txn>
       <svg

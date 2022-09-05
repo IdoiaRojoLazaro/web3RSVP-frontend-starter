@@ -3,8 +3,9 @@ import { Menu, Transition } from "@headlessui/react";
 import joinClassNames from "../utils/joinClassNames";
 import truncateAddress from "../utils/truncateAddress";
 import { ChevronDownIcon, UserIcon } from "@heroicons/react/outline";
+import { GetAccountResult } from "@wagmi/core";
 
-export default function Navmenu({ account, disconnect }) {
+export default function Navmenu({ account, disconnect }: { account: GetAccountResult; disconnect: () => void }) {
   return (
     <Menu as="div" className="relative z-10 inline-block text-left">
       <div>
@@ -35,49 +36,50 @@ export default function Navmenu({ account, disconnect }) {
         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <Menu.Item>
-              {({ account }) => (
-                <a
-                  href={`/my-rsvps/upcoming`}
-                  className={joinClassNames(
-                    account
-                      ? "bg-gray-100 text-gray-900 dark:text-white"
-                      : "text-gray-700",
-                    "block px-4 py-2 text-sm"
-                  )}
-                >
-                  My RSVPs
-                </a>
-              )}
+              <a
+                href={`/my-rsvps/upcoming`}
+                className={joinClassNames(
+                  account
+                    ? "bg-gray-100 text-gray-900 dark:text-white"
+                    : "text-gray-700",
+                  "block px-4 py-2 text-sm"
+                )}
+              >
+                My RSVPs
+              </a>
+              {/* {({ account }: GetAccountResult<BaseProvider>) => (
+                
+              )} */}
             </Menu.Item>
             <Menu.Item>
-              {({ account }) => (
-                <a
-                  href={`/my-events/upcoming`}
-                  className={joinClassNames(
-                    account
-                      ? "bg-gray-100 text-gray-900 dark:text-white"
-                      : "text-gray-700",
-                    "block px-4 py-2 text-sm"
-                  )}
-                >
-                  My Events
-                </a>
-              )}
+              {/* {({ account }: any) => ( */}
+              <a
+                href={`/my-events/upcoming`}
+                className={joinClassNames(
+                  account
+                    ? "bg-gray-100 text-gray-900 dark:text-white"
+                    : "text-gray-700",
+                  "block px-4 py-2 text-sm"
+                )}
+              >
+                My Events
+              </a>
+              {/* )} */}
             </Menu.Item>
             <Menu.Item>
-              {({ account }) => (
-                <a
-                  onClick={disconnect}
-                  className={joinClassNames(
-                    account
-                      ? "bg-gray-100 text-gray-900 dark:text-white"
-                      : "text-gray-700",
-                    "block px-4 py-2 text-sm cursor-pointer"
-                  )}
-                >
-                  Log Out
-                </a>
-              )}
+              {/* {({ account }) => ( */}
+              <a
+                onClick={disconnect}
+                className={joinClassNames(
+                  account
+                    ? "bg-gray-100 text-gray-900 dark:text-white"
+                    : "text-gray-700",
+                  "block px-4 py-2 text-sm cursor-pointer"
+                )}
+              >
+                Log Out
+              </a>
+              {/* )} */}
             </Menu.Item>
           </div>
         </Menu.Items>

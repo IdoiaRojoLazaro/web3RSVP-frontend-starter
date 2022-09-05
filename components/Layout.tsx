@@ -1,7 +1,8 @@
 import Header from "./Header";
 import Footer from "./Footer";
+import React from "react";
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: React.ComponentPropsWithoutRef<"div">) => {
   return (
     <div className="font-serif flex flex-col min-h-screen">
       <Header />

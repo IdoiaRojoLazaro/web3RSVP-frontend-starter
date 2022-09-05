@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 
+export enum ThemeType {
+  DARK = 'dark',
+  LIGHT = 'light'
+}
+
 function useDarkMode() {
   const [theme, setTheme] = useState(
-    typeof window !== "undefined" ? localStorage.theme : "dark"
+    typeof window !== "undefined" ? localStorage.theme : ThemeType.LIGHT
   );
-  const colorTheme = theme === "dark" ? "light" : "dark";
+  const colorTheme = theme === ThemeType.DARK ? ThemeType.LIGHT : ThemeType.DARK;
+
+  function handleTheme(ThemeType) {
+    setTheme(ThemeType);
+  }
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -17,7 +26,9 @@ function useDarkMode() {
     }
   }, [theme]);
 
-  return [colorTheme, setTheme];
+  return {
+    colorTheme, handleTheme
+  };
 }
 
 export default useDarkMode;

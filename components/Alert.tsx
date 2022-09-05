@@ -6,7 +6,14 @@ import {
   ExclamationCircleIcon,
 } from "@heroicons/react/outline";
 
-export default function Alert({ alertType, alertBody, triggerAlert, color }) {
+interface AlertInterface {
+  alertType: string;
+  alertBody: string;
+  triggerAlert: boolean;
+  color: string;
+}
+
+export default function Alert({ alertType, alertBody, triggerAlert, color }: AlertInterface) {
   const [showAlert, setShowAlert] = useState(triggerAlert);
 
   return (

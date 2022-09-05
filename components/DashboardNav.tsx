@@ -1,6 +1,6 @@
 import joinClassNames from "../utils/joinClassNames";
 
-export default function DashboardNav({ page }) {
+export default function DashboardNav({ page }: { page: string }) {
   let navigation = [
     {
       name: "My Events",
