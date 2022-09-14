@@ -1,16 +1,20 @@
 import React from "react";
 
 import useDarkMode, { ThemeType } from "../providers/useDarkMode";
+import { BtnTypes } from "../utils/btnTypeClasses";
+import Button from "./shared/Button";
 
 export const ThemeToggle = () => {
   const { colorTheme, handleTheme } = useDarkMode();
 
   return (
     <>
-      <div className="border rounded-md p-1">
+      <Button
+        className="hover:bg-antiqueBlue-100 dark:hover:bg-antiqueBlue-600"
+        btnType={BtnTypes.ICON} onClick={() => handleTheme(colorTheme === ThemeType.LIGHT ? ThemeType.LIGHT : ThemeType.DARK)}>
         {colorTheme === "light" ? (
           <svg
-            onClick={() => handleTheme(ThemeType.LIGHT)}
+
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
@@ -26,7 +30,6 @@ export const ThemeToggle = () => {
           </svg>
         ) : (
           <svg
-            onClick={() => handleTheme(ThemeType.DARK)}
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
@@ -41,7 +44,7 @@ export const ThemeToggle = () => {
             />
           </svg>
         )}
-      </div>
+      </Button>
     </>
   );
 };

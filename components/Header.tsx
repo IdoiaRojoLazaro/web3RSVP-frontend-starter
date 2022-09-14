@@ -5,11 +5,14 @@ import { useAccount, useDisconnect } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PlusIcon } from "@heroicons/react/outline";
 import { ThemeToggle } from "./ThemeToggle";
+import { NEW_EVENT_ROUTE } from "../constants/routes";
+import Button from "./shared/Button";
+import { BtnTypes } from "../utils/btnTypeClasses";
 
 export default function Header() {
-  const { data: account } = useAccount();
   const { disconnect } = useDisconnect();
   const [mounted, setMounted] = useState(false);
+  const { data: account, isLoading } = useAccount();
 
   useEffect(() => {
     setMounted(true);
@@ -26,23 +29,29 @@ export default function Header() {
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
           aria-label="Top"
         >
-          <div className="w-full py-3 flex flex-wrap items-center justify-between border-b border-antiqueBlue-500 lg:border-none">
+          <div className="w-full py-3 flex flex-wrap items-center justify-between ">
             <div className="flex items-center">
               <ThemeToggle />
               <Link href="/">
-                <a className="ml-3">web3rsvp</a>
+                <a className="ml-3">EventWeb3Brite</a>
               </Link>
             </div>
             <div className="ml-10 space-x-4 flex items-center">
-              <Link href="/create-event">
-                <a className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-antiqueBlue-700 border-antiqueBlue-100 transition-all hover:bg-antiqueBlue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-antiqueBlue-500">
+              <Link href={NEW_EVENT_ROUTE} >
+                <Button btnType={BtnTypes.OUTLINE}>
                   <PlusIcon className="w-4 mr-2" /> Event
-                </a>
+                </Button>
               </Link>
-              {account ? (
-                <Navmenu account={account} disconnect={() => disconnect()} />
-              ) : (
+              {isLoading &&
+                <Button btnType={BtnTypes.OUTLINE} className="animate-pulse" disabled>
+                  Connecting...
+                </Button>
+
+              }
+              {!account ? (
                 <ConnectButton />
+              ) : (
+                <Navmenu account={account} disconnect={() => disconnect()} />
               )}
             </div>
           </div>

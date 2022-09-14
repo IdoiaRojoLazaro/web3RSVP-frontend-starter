@@ -1,11 +1,6 @@
 import { Web3Storage } from "web3.storage";
-import {
-  showMessage,
-  showLink,
-  jsonFile,
-  getSavedToken,
-  makeGatewayURL,
-} from "./helpers.js";
+import { showMessage, makeGatewayURL, jsonFile } from "../helpers";
+
 
 const namePrefix = "ImageGallery";
 

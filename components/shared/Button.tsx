@@ -1,14 +1,15 @@
 import React from "react";
-import { btnTypeClasses } from "../../utils/btnTypeClasses";
+import { btnTypeClasses, BtnTypes } from "../../utils/btnTypeClasses";
+import joinClassNames from "../../utils/joinClassNames";
 
-const Button = ({ children, className, onClick, type, ...rest }: React.ComponentPropsWithoutRef<"button">) => {
+interface Props extends React.ComponentPropsWithoutRef<"button"> {
+  btnType: BtnTypes
+}
+
+const Button = ({ children, className, btnType, ...rest }: Props) => {
   return (
     <button
-      className={`p-2 rounded-md hover:ring-2 hover:ring-gray-300
-      ${btnTypeClasses(type)}
-      ${className || ""}
-      `}
-      onClick={onClick}
+      className={joinClassNames(btnTypeClasses(btnType), className || "")}
       {...rest}
     >
       {children}

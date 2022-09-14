@@ -1,11 +1,10 @@
 import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import { gql } from "@apollo/client";
 import client from "../../apollo-client";
 import { ethers } from "ethers";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import connectContract from "../../utils/connectContract";
 import formatTimestamp from "../../utils/formatTimestamp";
 import Alert from "../../components/Alert";
@@ -16,15 +15,23 @@ import {
   LinkIcon,
 } from "@heroicons/react/outline";
 import truncateAddress from "../../utils/truncateAddress";
+import { EVENT_QUERY } from "../../graphql/events/getEvent";
+import { checkNetwork } from "../../helpers/network";
+import Button from "../../components/shared/Button";
+import { BtnTypes } from "../../utils/btnTypeClasses";
+import { TxnModal } from "../../components/shared/TxnModal";
+import { TxnStatusType } from "../../providers/TransactionProvider";
+import { useWalletCxt } from "../../providers/WagmiProvider";
 
 function Event({ event }) {
   const { data: account } = useAccount();
-  console.log(event);
+  const { activeChain } = useNetwork();
+  const { TxnStatus, setTxnStatus } = useWalletCxt();
 
   const [success, setSuccess] = useState(null);
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(null);
-  const [currentTimestamp, setEventTimestamp] = useState(new Date().getTime());
+  const [currentTimestamp, _] = useState(new Date().getTime());
 
   function checkIfAlreadyRSVPed() {
     if (account) {
@@ -39,6 +46,7 @@ function Event({ event }) {
   }
 
   const newRSVP = async () => {
+    setTxnStatus(TxnStatusType.AWAITING_CONFIRMATION);
     try {
       const rsvpContract = connectContract();
 
@@ -48,10 +56,12 @@ function Event({ event }) {
           gasLimit: 300000,
         });
         setLoading(true);
+        setTxnStatus(TxnStatusType.PENDING);
         console.log("Minting...", txn.hash);
 
         await txn.wait();
         console.log("Minted -- ", txn.hash);
+        setTxnStatus(TxnStatusType.DONE);
         setSuccess(true);
         setLoading(false);
         setMessage("Your RSVP has been created successfully.");
@@ -59,6 +69,9 @@ function Event({ event }) {
         console.log("Error getting contract.");
       }
     } catch (error) {
+      if (error.code === 4001) {
+        setTxnStatus(TxnStatusType.REJECTED);
+      }
       setSuccess(false);
       setMessage("Error!");
       setLoading(false);
@@ -73,6 +86,9 @@ function Event({ event }) {
         <meta name="description" content={event.name} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {TxnStatus !== TxnStatusType.DEFAULT &&
+        <TxnModal title="Your RSVP has been created successfully." href={`/event/${event.id}`} />
+      }
       <section className="relative py-12">
         {loading && (
           <Alert
@@ -104,16 +120,16 @@ function Event({ event }) {
         </h1>
         <div className="flex flex-wrap-reverse lg:flex-nowrap">
           <div className="w-full pr-0 lg:pr-24 xl:pr-32">
-            <div className="mb-8 w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-antiqueBlue-500 overflow-hidden">
+            <div className="mb-8 w-full aspect-w-10 aspect-h-5 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-antiqueBlue-500 overflow-hidden">
               {event.imageURL && (
                 <Image src={event.imageURL} alt="event image" layout="fill" />
               )}
             </div>
-            <p>{event.description}</p>
+            <p className="whitespace-pre-line">{event.description}</p>
           </div>
           <div className="max-w-xs w-full flex flex-col gap-4 mb-6 lg:mb-0">
             {event.eventTimestamp > currentTimestamp ? (
-              account ? (
+              account && checkNetwork(activeChain.id) ? (
                 checkIfAlreadyRSVPed() ? (
                   <>
                     <span className="w-full text-center px-6 py-3 text-base font-medium rounded-full text-teal-800 bg-teal-100">
@@ -130,46 +146,45 @@ function Event({ event }) {
                     </div>
                   </>
                 ) : (
-                  <button
-                    type="button"
-                    className="w-full items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-antiqueBlue-700 bg-antiqueBlue-100 hover:bg-antiqueBlue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-antiqueBlue-500"
+                  <Button btnType={BtnTypes.OUTLINE}
                     onClick={newRSVP}
                   >
                     RSVP for {ethers.utils.formatEther(event.deposit)} MATIC
-                  </button>
+                  </Button>
                 )
               ) : (
                 <ConnectButton />
               )
             ) : (
-              <span className="w-full text-center px-6 py-3 text-base font-medium rounded-full border-2 border-gray-200">
+              <Button btnType={BtnTypes.SUBMIT} disabled>
                 Event has ended
-              </span>
+              </Button>
+
             )}
-            <div className="flex item-center">
-              <UsersIcon className="w-6 mr-2" />
-              <span className="truncate">
-                {event.totalRSVPs}/{event.maxCapacity} attending
-              </span>
-            </div>
-            <div className="flex item-center">
-              <TicketIcon className="w-6 mr-2" />
-              <span className="truncate">1 RSVP per wallet</span>
-            </div>
-            <div className="flex items-center">
-              <EmojiHappyIcon className="w-6 mr-2" />
-              <span className="truncate">
-                Hosted by{" "}
-                <a
-                  className="text-antiqueBlue-800 truncate hover:underline"
-                  href={`${process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL}address/${event.eventOwner}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {truncateAddress(event.eventOwner)}
-                </a>
-              </span>
-            </div>
+            <>
+              <div className="flex item-center">
+                <UsersIcon className="w-6 mr-2" />
+                <span className="truncate">{event.totalRSVPs}/{event.maxCapacity} attending</span>
+              </div>
+              <div className="flex item-center">
+                <TicketIcon className="w-6 mr-2" />
+                <span className="truncate">1 RSVP per wallet</span>
+              </div>
+              <div className="flex items-center">
+                <EmojiHappyIcon className="w-6 mr-2" />
+                <span className="truncate">
+                  Hosted by{" "}
+                  <a
+                    className="text-antiqueBlue-800 truncate hover:underline dark:text-antiqueBlue-400"
+                    href={`${process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL}address/${event.eventOwner}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {truncateAddress(event.eventOwner)}
+                  </a>
+                </span>
+              </div>
+            </>
           </div>
         </div>
       </section>
@@ -181,33 +196,9 @@ export default Event;
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
-  console.log(id);
 
   const { data } = await client.query({
-    query: gql`
-      query Event($id: String!) {
-        event(id: $id) {
-          id
-          eventID
-          name
-          description
-          link
-          eventOwner
-          eventTimestamp
-          maxCapacity
-          deposit
-          totalRSVPs
-          totalConfirmedAttendees
-          imageURL
-          rsvps {
-            id
-            attendee {
-              id
-            }
-          }
-        }
-      }
-    `,
+    query: EVENT_QUERY,
     variables: {
       id: id,
     },
